@@ -213,7 +213,7 @@ def generatepuzzle(tamanho):
     tabuleiro, coords_estrelas, regioes_posicoes = gerar_estrelas(tamanho)
     tabuleiro, regioes_posicoes = tentar_criar_regioes(tabuleiro, regioes_posicoes)
     tabuleiro = preenche_resto(tabuleiro, regioes_posicoes)
-    print(sum(len(valor) for valor in regioes_posicoes.values()))
+   
     
     return tabuleiro, coords_estrelas, regioes_posicoes
 
