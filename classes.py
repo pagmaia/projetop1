@@ -1,6 +1,5 @@
 import pygame
 from starpuzzle import generatepuzzle
-gridcells = [[0 for _ in range(8)] for _ in range(8)]
 
 BRANCO = (255, 255, 255)
 PRETO = (0, 0, 0)
@@ -34,7 +33,6 @@ class Botao():
             if pygame.mouse.get_pressed()[0] and not self.clicked:
                 self.clicked = True
                 action = True
-                print("clicado")
 
         if not pygame.mouse.get_pressed()[0]:
             self.clicked = False
@@ -94,7 +92,7 @@ class InputBox():
 
 class Puzzle():
 
-    def __init__(self, frame, pos, coresregiao, estrela, ponto, tamanho, tamanhocelulas):
+    def __init__(self, frame, pos, coresregiao, estrela, ponto, tamanho, tamanhocelulas, gridcells):
         self.frame = frame
         self.estrela = estrela
         self.ponto = ponto
@@ -103,9 +101,15 @@ class Puzzle():
         self.cores = coresregiao
         self.tamanho = tamanho
         self.tamanhocelulas = tamanhocelulas
+        self.gridcells = gridcells
 
-    def criarpuzzle(self, tela, semente):
+    def gerarpuzzle(self, semente):
         self.game = generatepuzzle(8, semente)[0]
+        self.coordsestrela = generatepuzzle(8, semente)[1]
+
+        return self.game, self.coordsestrela
+
+    def desenharpuzzle(self, tela):
         pygame.draw.rect(tela, PRETO, pygame.Rect(self.posx, self.posy, self.tamanho, self.tamanho))
         for i, x in enumerate(range(self.posx + 1, self.posx + self.tamanho, self.tamanhocelulas + 1)):  
             for j, y in enumerate(range(self.posy + 1, self.posy + self.tamanho, self.tamanhocelulas + 1)):
@@ -123,16 +127,29 @@ class Puzzle():
             if y > 7:
                 y -= 1
         
-            gridcells[x][y] += 1
+            self.gridcells[x][y] += 1
 
     def desenhar_ponto_estrela(self, tela):
-        for i in range(len(gridcells)):
-            for j in range(len(gridcells)):
-                if gridcells[i][j] > 2:
-                    gridcells[i][j] = 0
+        for i in range(len(self.gridcells)):
+            for j in range(len(self.gridcells)):
+                if self.gridcells[i][j] > 2:
+                    self.gridcells[i][j] = 0
             
-                if gridcells[i][j] == 1:
+                if self.gridcells[i][j] == 1:
                     tela.blit(self.ponto, ((self.posx + (i * (self.tamanhocelulas + 1)) + 18), (self.posy + (j * (self.tamanhocelulas + 1)) + 18)))
                 
-                elif gridcells[i][j] == 2:
+                elif self.gridcells[i][j] == 2:
                     tela.blit(self.estrela, ((self.posx + (i * (self.tamanhocelulas + 1)) + 11), (self.posy + (j * (self.tamanhocelulas + 1)) + 11)))
+
+    def limpar_ponto_estrela(self):
+        self.gridcells = [[0 for _ in range(8)] for _ in range(8)]
+
+    def vitoria(self):
+        ganhou = True
+        for pos in self.coordsestrela:
+            if self.gridcells[pos[0]][pos[1]] != 2:
+                ganhou = False
+
+        return ganhou
+
+                    

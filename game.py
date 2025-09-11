@@ -1,6 +1,5 @@
 # %%
 from typing import Any
-from starpuzzle import generatepuzzle
 from sys import exit
 from classes import Botao
 from classes import InputBox
@@ -45,10 +44,9 @@ rodando = True
 jogoativo = False
 
 exibindo = "menu"
-
-seed = InputBox((165, 35), (312, 25), fonteprincipal, BRANCO, PRETO, 8, "Seed:")
-game = Puzzle(grid, (197, 80), CORESPUZZLE, estrela, ponto, 401, 49)
 gridcells = [[0 for _ in range(8)] for _ in range(8)]
+seed = InputBox((165, 35), (312, 25), fonteprincipal, BRANCO, PRETO, 8, "Seed:")
+game = Puzzle(grid, (197, 80), CORESPUZZLE, estrela, ponto, 401, 49, gridcells)
 
 while rodando:
     bjogar = Botao((300, 250), botaojogar)
@@ -66,10 +64,13 @@ while rodando:
         seed.criar(tela)
         pygame.draw.rect(tela, BRANCO, pygame.Rect(197, 80, 401, 401))
         
-        if seed.input:
-            game.criarpuzzle(tela, seed.input)
+        if seed.input != "" or seed.input is None:
+            game.desenharpuzzle(tela)
             game.desenhar_ponto_estrela(tela)
             jogoativo = True
+
+            if game.vitoria():
+                print("x")
             
         bsairgame.criar(tela)
 
@@ -85,8 +86,9 @@ while rodando:
         if event.type == pygame.KEYDOWN:
             if exibindo == "game":
                 if event.key == pygame.K_RETURN:
-                    gridcells = [[0 for _ in range(8)] for _ in range(8)]
-
+                    game.gerarpuzzle(seed.input)
+                    game.limpar_ponto_estrela()
+                    
         if event.type == pygame.MOUSEBUTTONDOWN:
             if exibindo == "menu":
                 if bjogar.lidar_press(event):
@@ -111,6 +113,8 @@ while rodando:
             game.controles(event)
 
     pygame.display.update()
+
+
 
 
         

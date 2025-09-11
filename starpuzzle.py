@@ -2,8 +2,14 @@
 # Código para gerar um puzzle de tamanho NxN, de 1 estrela
 from random import choice
 from random import seed
+from copy import deepcopy
 
-def pos_segura_estrela(posx, posy, tabuleiro):
+def pos_segura_estrela(posx, posy, tabuleiro, regioes_posicoes, checkregiao):
+
+    if checkregiao:
+        for valor in regioes_posicoes[tabuleiro[posx][posy][1]]:
+            if tabuleiro[valor[0]][valor[1]][0]:
+                return False
 
     if posx < 0 or posx > len(tabuleiro) - 1 or posy < 0 or posy > len(tabuleiro) - 1:
         return False
@@ -39,12 +45,13 @@ def pos_segura_estrela(posx, posy, tabuleiro):
         
     return True
 
-def escolhas_possiveis(tabuleiro):
+def escolhas_possiveis(tabuleiro, regioes_posicoes):
     possiveis = []
+    checkregiao = False
 
     for i in range(len(tabuleiro)):
         for j in range(len(tabuleiro)):
-            if pos_segura_estrela(i, j, tabuleiro):
+            if pos_segura_estrela(i, j, tabuleiro, regioes_posicoes, checkregiao):
                 possiveis.append((i, j))
 
     if not possiveis:
@@ -62,7 +69,7 @@ def gerar_estrelas(tamanho):
     
     while len(coords_estrela) < tamanho:
 
-        status = escolhas_possiveis(tabuleiro)
+        status = escolhas_possiveis(tabuleiro, regioes_posicoes)
         
         if not status:
             for i in range(len(coords_estrela) -1, -1, -1):
@@ -201,6 +208,41 @@ def gerar_regioes(tabuleiro, regioes_posicoes):
 
     return tabuleiro, regioes_posicoes
 
+def tabuleirovazio(tabuleiro):
+    game = []
+    for i in range(len(tabuleiro)):
+        linha = []
+        for j in range(len(tabuleiro)):
+            info = []
+            info.append(0)
+            info.append(tabuleiro[i][j][1])
+            linha.append(info)
+
+        game.append(linha)
+
+    return game
+
+def testpuzzle(game, regioes_posicoes, solucoes = None, linha = 0):
+    checkregiao = True
+    if solucoes is None:
+        solucoes = []
+
+    if linha == len(game):
+        solucoes.append(deepcopy(game))
+        return len(solucoes) < 2
+    
+    for coluna in range(len(game)):
+
+        if pos_segura_estrela(linha, coluna, game, regioes_posicoes, checkregiao):
+            game[linha][coluna][0] = 1
+
+            if not testpuzzle(game, regioes_posicoes, solucoes, linha + 1):
+                return False
+            
+        game[linha][coluna][0] = 0
+
+    return True
+
 # Funções para testar/visualizar o resultado
 def printgame(tabuleiro):
 
@@ -215,9 +257,15 @@ def somadoselementos(dicionario):
 # Gerar puzzle
 def generatepuzzle(tamanho, semente):
     seed(semente)
-    tabuleiro, coords_estrelas, regioes_posicoes = gerar_estrelas(tamanho)
-    tabuleiro, regioes_posicoes = gerar_regioes(tabuleiro, regioes_posicoes)
-   
-    return tabuleiro, coords_estrelas, regioes_posicoes
+    while True:
+        tabuleiro, coords_estrelas, regioes_posicoes = gerar_estrelas(tamanho)
+        tabuleiro, regioes_posicoes = gerar_regioes(tabuleiro, regioes_posicoes)
+        
+        solucoes = []
+        game = tabuleirovazio(tabuleiro)
+        testpuzzle(game, regioes_posicoes, solucoes)
+            
+        if len(solucoes) == 1:
+            return tabuleiro, coords_estrelas, regioes_posicoes
+# %#
 # %%
-
