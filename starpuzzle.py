@@ -201,7 +201,7 @@ def gerar_regioes(tabuleiro, regioes_posicoes):
 
     return tabuleiro, regioes_posicoes
 
-        
+# Funções para testar/visualizar o resultado
 def printgame(tabuleiro):
 
     for direcao in tabuleiro:
@@ -212,14 +212,12 @@ def printgame(tabuleiro):
 def somadoselementos(dicionario):
     return sum(len(valor) for valor in dicionario.values())
 
+# Gerar puzzle
 def generatepuzzle(tamanho, semente):
     seed(semente)
     tabuleiro, coords_estrelas, regioes_posicoes = gerar_estrelas(tamanho)
     tabuleiro, regioes_posicoes = gerar_regioes(tabuleiro, regioes_posicoes)
    
     return tabuleiro, coords_estrelas, regioes_posicoes
-
-    
-
 # %%
 
