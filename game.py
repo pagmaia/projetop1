@@ -47,12 +47,13 @@ exibindo = "menu"
 gridcells = [[0 for _ in range(8)] for _ in range(8)]
 seed = InputBox((165, 35), (312, 25), fonteprincipal, BRANCO, PRETO, 8, "Seed:")
 game = Puzzle(grid, (197, 80), CORESPUZZLE, estrela, ponto, 401, 49, gridcells)
+bjogar = Botao((300, 250), botaojogar)
+bcomojogar = Botao((300, 350), botaocomojogar)
+bsairgame = Botao((400, 500), botaosair)
+bsairhowtoplay = Botao((300, 400), botaosair)
 
 while rodando:
-    bjogar = Botao((300, 250), botaojogar)
-    bcomojogar = Botao((300, 350), botaocomojogar)
-    bsairgame = Botao((400, 500), botaosair)
-    bsairhowtoplay = Botao((300, 400), botaosair)
+    
     tela.fill(BACKGROUND)
 
     if exibindo == "menu":
@@ -62,9 +63,9 @@ while rodando:
 
     elif exibindo == "game":
         seed.criar(tela)
-        pygame.draw.rect(tela, BRANCO, pygame.Rect(197, 80, 401, 401))
+        game.desenharframe(tela)
         
-        if seed.input != "" or seed.input is None:
+        if len(seed.input) > 1:
             game.desenharpuzzle(tela)
             game.desenhar_ponto_estrela(tela)
             jogoativo = True
@@ -83,16 +84,21 @@ while rodando:
             exit()
             pygame.quit()
 
+        if exibindo == "game":
+            seed.lidar_input(event)
+        if jogoativo:
+            game.controles(event)
+
         if event.type == pygame.KEYDOWN:
             if exibindo == "game":
-                if event.key == pygame.K_RETURN:
+                if event.key == pygame.K_RETURN and seed.input:
                     game.gerarpuzzle(seed.input)
                     game.limpar_ponto_estrela()
                     
         if event.type == pygame.MOUSEBUTTONDOWN:
             if exibindo == "menu":
-                if bjogar.lidar_press(event):
-                    exibindo = "game"
+                if bjogar.lidar_press(event):        
+                    exibindo = "game"   
 
                 if bcomojogar.lidar_press(event):
                     exibindo = "howtoplay"
@@ -103,14 +109,10 @@ while rodando:
                     jogoativo = False
                     seed = InputBox((165, 35), (312, 25), fonteprincipal, BRANCO, PRETO, 8, "Seed:")
                     gridcells = [[0 for _ in range(8)] for _ in range(8)]
-            
+                    
             if exibindo == "howtoplay":
                 if bsairhowtoplay.lidar_press(event):
                     exibindo = "menu"
-
-        seed.lidar_input(event)
-        if jogoativo:
-            game.controles(event)
 
     pygame.display.update()
 

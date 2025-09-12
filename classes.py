@@ -21,13 +21,13 @@ class Botao():
         self.imagem = imagem
         self.rect = self.imagem.get_rect()
         self.rect.topleft = (posicao[0], posicao[1])
-        self.clicked = False
 
     def criar(self, tela):
 
         tela.blit(self.imagem, (self.rect.x, self.rect.y))
 
     def lidar_press(self, evento):
+        self.clicked = False
         action = False
         if self.rect.collidepoint(evento.pos):
             if pygame.mouse.get_pressed()[0] and not self.clicked:
@@ -109,6 +109,9 @@ class Puzzle():
 
         return self.game, self.coordsestrela
 
+    def desenharframe(self, tela):
+        pygame.draw.rect(tela, BRANCO, pygame.Rect(self.posx, self.posy, self.tamanho, self.tamanho))
+ 
     def desenharpuzzle(self, tela):
         pygame.draw.rect(tela, PRETO, pygame.Rect(self.posx, self.posy, self.tamanho, self.tamanho))
         for i, x in enumerate(range(self.posx + 1, self.posx + self.tamanho, self.tamanhocelulas + 1)):  
@@ -116,7 +119,7 @@ class Puzzle():
                 self.rect = pygame.Rect(x, y, self.tamanhocelulas, self.tamanhocelulas)
                 self.celula = self.game[i][j]
                 pygame.draw.rect(tela, self.cores[self.celula[1]], self.rect)
-                
+    
     def controles(self, evento):
         if evento.type == pygame.MOUSEBUTTONDOWN and self.posx < evento.pos[0] < self.tamanho + self.posx and self.posy < evento.pos[1] < self.tamanho + self.posy:
             x = (evento.pos[0] - self.posx) // 49

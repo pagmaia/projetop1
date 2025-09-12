@@ -268,4 +268,5 @@ def generatepuzzle(tamanho, semente):
         if len(solucoes) == 1:
             return tabuleiro, coords_estrelas, regioes_posicoes
 # %#
+
 # %%
