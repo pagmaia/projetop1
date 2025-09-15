@@ -13,6 +13,7 @@ A interface gráfica foi criada utilizando Pygame.
    python3 -m venv .venv
    ```
 3. Ative o enviroment:
+
    Linux:
    ```
    source .venv/bin/activate
@@ -21,13 +22,13 @@ A interface gráfica foi criada utilizando Pygame.
    ```
    .\venv\Scripts\activate
    ```
-4. Depois de ser ativado, instale o pygame utilizando o seguinte comando:
+5. Depois de ser ativado, instale o pygame utilizando o seguinte comando:
    ```
    python3 pip install pygame=2.6.1
    ```
-5. Depois de instalado, para jogar, execute o seguinte comando:
+6. Depois de instalado, para jogar, execute o seguinte comando:
    ```
    python3 game.py
    ```
-6. Divirta-se!
+7. Divirta-se!
    
