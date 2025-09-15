@@ -15,6 +15,20 @@ TURQUESA = (163, 217, 229)
 
 CORESPUZZLE = {1: VERMELHO, 2: VERDE, 3: LARANJA, 4: AMARELO, 5: AZUL, 6: ROXO, 7: ROSA, 8: TURQUESA}
 
+class Texto():
+    def __init__(self, pos, texto, fonte, cor):
+        self.posx = pos[0]
+        self.posy = pos[1]
+        self.texto = texto
+        self.fonte = fonte
+        self.entrelinhas = 5
+        self.cor = cor
+
+    def criartexto(self, tela):
+        for i, linha in enumerate(self.texto.split("\n")):
+            self.superficie = self.fonte.render(linha, True, self.cor)
+            tela.blit(self.superficie, (self.posx, self.posy + i * (self.fonte.size(linha)[1] + self.entrelinhas)))
+            
 class Botao():
 
     def __init__(self, posicao, imagem):
@@ -48,6 +62,7 @@ class InputBox():
         self.posicaox = posicao[0]
         self.posicaoy = posicao[1]
         self.textoexibido = textoexibido
+        self.fonte = fonte
         self.fundo = fundo
         self.cortexto = cortexto
         self.fundo = fundo
@@ -55,7 +70,7 @@ class InputBox():
         self.rect = pygame.Rect(self.posicaox, self.posicaoy, self.tamanhox, self.tamanhoy)
         self.rect.topleft = ((self.posicaox, self.posicaoy))
         self.rectborda = self.rect.inflate(2, 2)
-        self.textosuperficie = fonte.render(self.textoexibido, True, cortexto)
+        self.textosuperficie = self.fonte.render(self.textoexibido, True, cortexto)
         self.textorect = self.textosuperficie.get_rect()
         self.textorect.topleft = (self.posicaox + 6, self.posicaoy - 4)
         self.clicked = False
@@ -89,6 +104,9 @@ class InputBox():
                         self.textoexibido += evento.unicode
 
                 self.textosuperficie = self.fonte.render(self.textoexibido, True, self.cortexto)
+
+    def reset(self):
+        self.input = ""
 
 class Puzzle():
 
@@ -147,12 +165,63 @@ class Puzzle():
     def limpar_ponto_estrela(self):
         self.gridcells = [[0 for _ in range(8)] for _ in range(8)]
 
+    def celulas_com_estrela(self):
+        contador = 0
+        for i in range(len(self.gridcells)):
+            for j in range(len(self.gridcells)):
+                if self.gridcells[i][j] == 2:
+                    contador += 1
+        return contador
+
     def vitoria(self):
         ganhou = True
         for pos in self.coordsestrela:
             if self.gridcells[pos[0]][pos[1]] != 2:
                 ganhou = False
 
+        if self.celulas_com_estrela() != 8:
+            ganhou = False
+
         return ganhou
+    
+class Timer():
+    def __init__(self, pos, fonte, cor, evento, textopadrao):
+        self.posx = pos[0]
+        self.posy = pos[1]
+        self.fonte = fonte
+        self.cor = cor
+        self.evento = evento
+        self.textopadrao = textopadrao
+        self.tempopassado = 0
+        self.inicio = 0
+        self.iniciou = False
+
+    def criartimer(self, tela):
+        if self.iniciou:
+            self.tempopassado = pygame.time.get_ticks() // 1000 - self.inicio
+
+        self.minutos = self.tempopassado // 60
+        self.segundos = self.tempopassado % 60
+        self.texto = f"{self.textopadrao} {self.minutos:02d}:{self.segundos:02d}"
+        self.textosuperficie = self.fonte.render(self.texto, True, self.cor)
+        tela.blit(self.textosuperficie, (self.posx, self.posy))
+
+    def start(self, evento):
+        if evento.key == self.evento:
+            self.inicio = pygame.time.get_ticks() // 1000
+            self.iniciou = True
+
+    def reset(self):
+        self.iniciou = False
+        self.tempopassado = 0
+
+        
+
+
+
+    
+
+
+            
 
                     
