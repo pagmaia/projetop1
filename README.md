@@ -4,7 +4,7 @@ Funciona gerando um puzzle 8x8, em que há apenas uma solução com uma estrela 
 A interface gráfica foi criada utilizando Pygame.
 
 # Instruções para instalação:
-1. No terminal Linux ou Windows, clone o repositório usando o seguinte comando:
+1. No terminal Linux ou Windows, clone o repositório usando o seguinte comando (Necessário que o usuário tenha o Git instalado):
    ```
    git clone https://github.com/pagmaia/projetop1.git
    ```
@@ -24,7 +24,7 @@ A interface gráfica foi criada utilizando Pygame.
    ```
 5. Depois de ser ativado, instale o pygame utilizando o seguinte comando:
    ```
-   python3 pip install pygame=2.6.1
+   python3 pip install pygame==2.6.1
    ```
 6. Depois de instalado, para jogar, execute o seguinte comando:
    ```
