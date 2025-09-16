@@ -1,4 +1,8 @@
+
 # Star Puzzle 🌟
+<img width="795" height="590" alt="Captura de tela 2025-09-15 202657" src="https://github.com/user-attachments/assets/8ab8a3c3-de2f-40ff-af53-f10cd619c1e1" /> 
+
+
 Jogo semelhante ao [Star Battle](https://starbattle.puzzlebaron.com/play.php) ou [Queens](https://www.linkedin.com/games/queens).  
 Funciona gerando um puzzle 8x8, em que há apenas uma solução com uma estrela por linha/coluna/cor, sem que duas estrelas se toquem diagonalmente.  
 A interface gráfica foi criada utilizando Pygame.  
@@ -31,4 +35,5 @@ A interface gráfica foi criada utilizando Pygame.
    python3 game.py
    ```
 7. Divirta-se!
+
    
