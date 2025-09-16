@@ -12,7 +12,7 @@ A interface gráfica foi criada utilizando Pygame.
 -- Pip (Versão mais recente) --   
 
 # Instruções para instalação:
-1. No terminal Linux ou Windows, clone o repositório usando o seguinte comando (Necessário que o usuário tenha Git instalado):
+1. No terminal Linux ou Windows, clone o repositório usando o seguinte comando (Necessário que o usuário tenha [Git](https://git-scm.com/downloads) instalado):
    ```
    git clone https://github.com/pagmaia/projetop1.git
    ```
