@@ -144,7 +144,7 @@ while rodando:
                 if bsairhowtoplay.lidar_press(event):
                     exibindo = "menu"
 
-    clock.tick(pygame.display.get_current_refresh_rate())
+    clock.tick(60)
     pygame.display.update()
 
 pygame.quit()
