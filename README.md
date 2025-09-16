@@ -24,7 +24,7 @@ A interface gráfica foi criada utilizando Pygame.
    ```
 5. Depois de ser ativado, instale o pygame utilizando o seguinte comando:
    ```
-   python3 pip install pygame==2.6.1
+   pip install pygame==2.6.1
    ```
 6. Depois de instalado, para jogar, execute o seguinte comando:
    ```
