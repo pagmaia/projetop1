@@ -44,8 +44,8 @@ CORESPUZZLE = {1: VERMELHO, 2: VERDE, 3: LARANJA, 4: AMARELO, 5: AZUL, 6: ROXO, 
             
 rodando = True
 jogoativo = False
-
 exibindo = "menu"
+
 gridcells = [[0 for _ in range(8)] for _ in range(8)]
 seed = InputBox((165, 35), (312, 25), fonteprincipal30, BRANCO, PRETO, 8, "")
 game = Puzzle(grid, (197, 80), CORESPUZZLE, estrela, ponto, 401, 49, gridcells)
@@ -75,10 +75,10 @@ while rodando:
         seedtitulo.criartexto(tela)
         seed.criar(tela)
         game.desenharframe(tela)
-        timer.criartimer(tela)
         
         if len(seed.input) > 1:
             seedtitulo3 = Texto((356, 478), f"{seed.input}", fonteprincipal30, PRETO)
+            timer.criartimer(tela)
             game.desenharpuzzle(tela)
             game.desenhar_ponto_estrela(tela)
             jogoativo = True
@@ -144,16 +144,9 @@ while rodando:
                 if bsairhowtoplay.lidar_press(event):
                     exibindo = "menu"
 
-    clock.tick(60)
+    clock.tick(pygame.display.get_current_refresh_rate())
     pygame.display.update()
 
 pygame.quit()
-
-
-
-
-        
-
-
 
 # %%
