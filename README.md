@@ -6,13 +6,17 @@
 Jogo semelhante ao [Star Battle](https://starbattle.puzzlebaron.com/play.php) ou [Queens](https://www.linkedin.com/games/queens).  
 Funciona gerando um puzzle 8x8, em que há apenas uma solução com uma estrela por linha/coluna/cor, sem que duas estrelas se toquem diagonalmente.  
 A interface gráfica foi criada utilizando Pygame.  
+# Requisitos 
+-- Python 3.12 --  
+-- Pygame 2.6.1 --  
+-- Pip (Versão mais recente) --   
 
 # Instruções para instalação:
-1. No terminal Linux ou Windows, clone o repositório usando o seguinte comando (Necessário que o usuário tenha o Git instalado):
+1. No terminal Linux ou Windows, clone o repositório usando o seguinte comando (Necessário que o usuário tenha Git instalado):
    ```
    git clone https://github.com/pagmaia/projetop1.git
    ```
-2. Após clonar, entre no diretório e crie um enviroment em python (Nesse passo utilizaremos o venv):
+2. Após clonar, entre no diretório e crie um enviroment em python usando [virtual env](https://virtualenv.pypa.io/en/latest/installation.html).
    ```
    python3 -m venv .venv
    ```
@@ -22,18 +26,23 @@ A interface gráfica foi criada utilizando Pygame.
    ```
    source .venv/bin/activate
    ```
-   Windows:
+   Windows (cmd):
    ```
    .\venv\Scripts\activate
    ```
-5. Depois de ser ativado, instale o pygame utilizando o seguinte comando:
+5. Depois de ser ativado, instale o Pygame:  
+   Se o enviroment não tiver Pip instalado, instale usando o seguinte comando:
+   ```
+   python3 -m ensurepip
+   ```
+   Com Pip instalado, execute o seguinte comando para instalar o Pygame:
    ```
    pip install pygame==2.6.1
    ```
-6. Depois de instalado, para jogar, execute o seguinte comando:
+7. Depois de instalado, para jogar, execute o seguinte comando:
    ```
    python3 game.py
    ```
-7. Divirta-se!
+8. Divirta-se!
 
    
