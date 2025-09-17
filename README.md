@@ -8,8 +8,8 @@ Funciona gerando um puzzle 8x8, em que há apenas uma solução com uma estrela 
 A interface gráfica foi criada utilizando Pygame.  
 # Requisitos 
 -- Python 3.12 --  
+-- Pip (Versão mais recente) --  
 -- Pygame 2.6.1 --  
--- Pip (Versão mais recente) --   
 
 # Instruções para instalação:
 1. No terminal Linux ou Windows, clone o repositório usando o seguinte comando (Necessário que o usuário tenha [Git](https://git-scm.com/downloads) instalado):
@@ -31,19 +31,22 @@ A interface gráfica foi criada utilizando Pygame.
    .\venv\Scripts\activate
    ```
 5. Depois de ser ativado, instale o Pygame:  
-   Se o enviroment não tiver Pip instalado, instale usando o seguinte comando:
+   Cheque se o enviroment possui Pip instalado com o seguinte comando:  
    ```
-   python3 -m ensurepip
+   pip --version
    ```
-   Com Pip instalado, execute o seguinte comando para instalar o Pygame:
+   Se o Pip estiver instalado, instale o Pygame:    
    ```
    pip install pygame==2.6.1
    ```
-   ou
+   Se o enviroment não tiver Pip instalado, instale o Pip e o Pygame utilizando esses comandos:
+   ```
+   python3 -m ensurepip
+   ```
    ```
    python3 -m pip install pygame==2.6.1
    ```
-7. Depois de instalado, para jogar, execute o seguinte comando:
+7. Depois de instalado, para jogar, utilize o seguinte comando:
    ```
    python3 game.py
    ```
