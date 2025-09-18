@@ -1,5 +1,5 @@
 
-# Star Puzzle 🌟
+# Star Battle 🌟
 <img width="795" height="590" alt="Captura de tela 2025-09-15 202657" src="https://github.com/user-attachments/assets/8ab8a3c3-de2f-40ff-af53-f10cd619c1e1" /> 
 
 
@@ -9,7 +9,10 @@ A interface gráfica foi criada utilizando Pygame.
 # Requisitos 
 -- Python 3.12.7 --  
 -- Pip (Versão mais recente) --  
--- Pygame 2.6.1 --  
+-- Pygame 2.6.1 -- 
+
+# Vídeo
+https://www.youtube.com/watch?v=-pV63buh3p4  
 
 # Instruções para instalação:
 1. No terminal Linux ou Windows, clone o repositório usando o seguinte comando (Necessário que o usuário tenha [Git](https://git-scm.com/downloads) instalado):
