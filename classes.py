@@ -121,6 +121,7 @@ class Puzzle():
         self.tamanhocelulas = tamanhocelulas
         self.gridcells = gridcells
         self.seedsgeradas = seedsgeradas
+        self.log = []
 
     def gerar_puzzle(self, semente):
         self.game = generatepuzzle(8, semente)[0]
@@ -152,6 +153,7 @@ class Puzzle():
                 y -= 1
         
             self.gridcells[x][y] += 1
+            self.log.append((x, y))
 
     def desenhar_ponto_estrela(self, tela):
         for i in range(len(self.gridcells)):
@@ -184,6 +186,13 @@ class Puzzle():
         
         return False
 
+    def voltar(self):
+        if not self.log:
+            return False
+         
+        x, y = self.log[-1]
+        self.gridcells[x][y] -= 1
+        self.log.pop(-1)
 
     def vitoria(self):
         ganhou = True
@@ -195,6 +204,7 @@ class Puzzle():
             ganhou = False
 
         return ganhou
+    
     
 class Timer():
     def __init__(self, pos, fonte, cor, evento, textopadrao):

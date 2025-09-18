@@ -18,6 +18,7 @@ pygame.display.set_caption("STAR PUZZLE")
 botaojogar = pygame.image.load(os.path.join("Imagens", "Botoes", "jogar.png")).convert_alpha()
 botaocomojogar = pygame.image.load(os.path.join("Imagens", "Botoes", "comojogar.png")).convert_alpha()
 botaosair = pygame.image.load(os.path.join("Imagens", "Botoes", "sair.png")).convert_alpha()
+botaovoltar = pygame.image.load(os.path.join("Imagens", "Botoes", "voltar.png")).convert_alpha()
 titulo = pygame.image.load(os.path.join("Imagens", "Titulo.png")).convert_alpha()
 boxvazia = pygame.image.load(os.path.join("Imagens", "boxvazia.png")).convert_alpha()
 grid = pygame.image.load(os.path.join("Imagens", "Puzzle", "grid.png")).convert_alpha()
@@ -55,6 +56,7 @@ game = Puzzle(grid, (197, 80), CORESPUZZLE, estrela, ponto, 401, 49, gridcells, 
 bjogar = Botao((300, 250), botaojogar)
 bcomojogar = Botao((300, 350), botaocomojogar)
 bsair = Botao((598, 529), botaosair)
+bvoltar = Botao((20, 545), botaovoltar)
 regrastitulo = Texto((335, 29), "Regras:", fonteprincipal30, PRETO)
 regras = Texto((25, 80), "Em cada tabuleiro gerado existe apenas uma solução\ncom uma estrela por linha/coluna/cor, sem que haja duas\nestrelas tocando uma a outra, mesmo diagonalmente.", fonteprincipal25, PRETO)
 controlestitulo = Texto((314, 195), "Controles:", fonteprincipal30, PRETO)
@@ -88,6 +90,7 @@ while rodando:
                 exibindo = "vitoria"
             
         bsair.criar_botao(tela)
+        bvoltar.criar_botao(tela)
 
     elif exibindo == "vitoria":
         seedpuzzle = Texto((180, 237), f"Seed: {seedinputbox.input}", fonteprincipal30, PRETO)
@@ -138,6 +141,10 @@ while rodando:
                     jogoativo = False
                     seedinputbox.reset()
                     timer.reset()
+                
+                if bvoltar.lidar_press(event):
+                    if game.voltar():
+                        continue
 
             if exibindo == "vitoria":
                 if bsair.lidar_press(event):
