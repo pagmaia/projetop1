@@ -1,5 +1,5 @@
 import pygame
-from starpuzzle import generatepuzzle
+from gerador import generatepuzzle
 
 BRANCO = (255, 255, 255)
 PRETO = (0, 0, 0)
