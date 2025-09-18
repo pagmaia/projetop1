@@ -52,4 +52,4 @@ A interface gráfica foi criada utilizando Pygame.
    ```
 8. Divirta-se!
 
-   
+Feito por Pedro Arthur Gomes Maia
