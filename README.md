@@ -1,5 +1,5 @@
 
-# Star Puzzle 🌟
+# Star Battle 🌟
 <img width="795" height="590" alt="Captura de tela 2025-09-15 202657" src="https://github.com/user-attachments/assets/8ab8a3c3-de2f-40ff-af53-f10cd619c1e1" /> 
 
 
