@@ -45,10 +45,6 @@ TURQUESA = (163, 217, 229)
 
 CORESPUZZLE = {1: VERMELHO, 2: VERDE, 3: LARANJA, 4: AMARELO, 5: AZUL, 6: ROXO, 7: ROSA, 8: TURQUESA}
             
-rodando = True
-jogoativo = False
-exibindo = "menu"
-
 #Objetos
 gridcells = [[0 for _ in range(8)] for _ in range(8)]
 seedinputbox = InputBox((165, 35), (312, 25), fonteprincipal30, BRANCO, PRETO, 8, "")
@@ -66,100 +62,108 @@ vitoriatexto = Texto((180, 73), "Parabéns!!\nVocê resolveu o star puzzle!!", f
 timer = Timer((301,498), fonteprincipal30, PRETO, pygame.K_RETURN, "Tempo:")
 
 #Game Loop
-while rodando:
-    
-    tela.fill(BACKGROUND)
 
-    if exibindo == "menu":
-        tela.blit(titulo, (225, 100))
-        bjogar.criar_botao(tela)
-        bcomojogar.criar_botao(tela)
+def main():
+    rodando = True
+    jogoativo = False
+    exibindo = "menu"
 
-    elif exibindo == "game":
-        seedtitulo.criar_texto(tela)
-        seedinputbox.criar_inputbox(tela)
-        game.desenhar_frame(tela)
+    while rodando:
         
-        if len(seedinputbox.input) > 1:
-            timer.criar_timer(tela)
-            game.desenhar_puzzle(tela)
-            game.desenhar_ponto_estrela(tela)
-            game.ativar_hold()
-            jogoativo = True
+        tela.fill(BACKGROUND)
 
-            if game.vitoria():
-                exibindo = "vitoria"
+        if exibindo == "menu":
+            tela.blit(titulo, (225, 100))
+            bjogar.criar_botao(tela)
+            bcomojogar.criar_botao(tela)
+
+        elif exibindo == "game":
+            seedtitulo.criar_texto(tela)
+            seedinputbox.criar_inputbox(tela)
+            game.desenhar_frame(tela)
             
-        bsair.criar_botao(tela)
-        bvoltar.criar_botao(tela)
+            if len(seedinputbox.input) > 1:
+                timer.criar_timer(tela)
+                game.desenhar_puzzle(tela)
+                game.desenhar_ponto_estrela(tela)
+                game.ativar_hold()
+                jogoativo = True
 
-    elif exibindo == "vitoria":
-        seedpuzzle = Texto((180, 237), f"Seed: {seedinputbox.input}", fonteprincipal30, PRETO)
-        timerfinal = Texto((180, 287), f"Tempo:{timer.tempopassado // 60:2d}:{timer.tempopassado % 60}", fonteprincipal30, PRETO)
-        bsair.criar_botao(tela)
-        vitoriatexto.criar_texto(tela)
-        seedpuzzle.criar_texto(tela)
-        timerfinal.criar_texto(tela)
-
-    elif exibindo == "howtoplay":
-        bsair.criar_botao(tela)
-        regrastitulo.criar_texto(tela)
-        regras.criar_texto(tela)
-        controlestitulo.criar_texto(tela)
-        controles.criar_texto(tela)
-#Event Handler
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            rodando = False
-
-        if exibindo == "game":
-            seedinputbox.lidar_input(event)
-        
-        if event.type == pygame.KEYDOWN:
-            if exibindo == "game":
-                if event.key == pygame.K_RETURN and game.seedsgeradas[-1] != seedinputbox.input:
-                    game.gerar_puzzle(seedinputbox.input)
-                    game.limpar_ponto_estrela()
-                    timer.start(event)
-
-                elif event.key == pygame.K_RETURN and game.seedsgeradas[-1] == seedinputbox.input:
-                    game.gerar_puzzle(seedinputbox.input)
-                    game.limpar_ponto_estrela()
-                    
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            if exibindo == "menu":
-                if bjogar.lidar_press(event):        
-                    exibindo = "game"   
-
-                if bcomojogar.lidar_press(event):
-                    exibindo = "howtoplay"
-
-            if exibindo == "game":
-                if jogoativo:
-                    game.ativar_click(event)
-
-                if bsair.lidar_press(event):
-                    exibindo = "menu"
-                    jogoativo = False
-                    seedinputbox.reset()
-                    timer.reset()
+                if game.vitoria():
+                    exibindo = "vitoria"
                 
-                if bvoltar.lidar_press(event):
-                    if game.voltar():
-                        continue
+            bsair.criar_botao(tela)
+            bvoltar.criar_botao(tela)
 
-            if exibindo == "vitoria":
-                if bsair.lidar_press(event):
-                    exibindo = "menu"
-                    seedinputbox.reset()
-                    timer.reset()
+        elif exibindo == "vitoria":
+            seedpuzzle = Texto((180, 237), f"Seed: {seedinputbox.input}", fonteprincipal30, PRETO)
+            timerfinal = Texto((180, 287), f"Tempo:{timer.tempopassado // 60:2d}:{timer.tempopassado % 60}", fonteprincipal30, PRETO)
+            bsair.criar_botao(tela)
+            vitoriatexto.criar_texto(tela)
+            seedpuzzle.criar_texto(tela)
+            timerfinal.criar_texto(tela)
+
+        elif exibindo == "howtoplay":
+            bsair.criar_botao(tela)
+            regrastitulo.criar_texto(tela)
+            regras.criar_texto(tela)
+            controlestitulo.criar_texto(tela)
+            controles.criar_texto(tela)
+    #Event Handler
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                rodando = False
+
+            if exibindo == "game":
+                seedinputbox.lidar_input(event)
+            
+            if event.type == pygame.KEYDOWN:
+                if exibindo == "game":
+                    if event.key == pygame.K_RETURN and game.seedsgeradas[-1] != seedinputbox.input:
+                        game.gerar_puzzle(seedinputbox.input)
+                        game.limpar_ponto_estrela()
+                        timer.start(event)
+
+                    elif event.key == pygame.K_RETURN and game.seedsgeradas[-1] == seedinputbox.input:
+                        game.gerar_puzzle(seedinputbox.input)
+                        game.limpar_ponto_estrela()
+                        
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if exibindo == "menu":
+                    if bjogar.lidar_press(event):        
+                        exibindo = "game"   
+
+                    if bcomojogar.lidar_press(event):
+                        exibindo = "howtoplay"
+
+                if exibindo == "game":
+                    if jogoativo:
+                        game.ativar_click(event)
+
+                    if bsair.lidar_press(event):
+                        exibindo = "menu"
+                        jogoativo = False
+                        seedinputbox.reset()
+                        timer.reset()
                     
-            if exibindo == "howtoplay":
-                if bsair.lidar_press(event):
-                    exibindo = "menu"
+                    if bvoltar.lidar_press(event):
+                        if game.voltar():
+                            continue
 
-    clock.tick(60)
-    pygame.display.update()
+                if exibindo == "vitoria":
+                    if bsair.lidar_press(event):
+                        exibindo = "menu"
+                        seedinputbox.reset()
+                        timer.reset()
+                        
+                if exibindo == "howtoplay":
+                    if bsair.lidar_press(event):
+                        exibindo = "menu"
 
-pygame.quit()
+        clock.tick(60)
+        pygame.display.update()
 
+    pygame.quit()
+
+if __name__ == "__main__":
+    main()
