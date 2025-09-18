@@ -24,7 +24,7 @@ class Texto():
         self.entrelinhas = 5
         self.cor = cor
 
-    def criartexto(self, tela):
+    def criar_texto(self, tela):
         for i, linha in enumerate(self.texto.split("\n")):
             self.superficie = self.fonte.render(linha, True, self.cor)
             tela.blit(self.superficie, (self.posx, self.posy + i * (self.fonte.size(linha)[1] + self.entrelinhas)))
@@ -36,7 +36,7 @@ class Botao():
         self.rect = self.imagem.get_rect()
         self.rect.topleft = (posicao[0], posicao[1])
 
-    def criar(self, tela):
+    def criar_botao(self, tela):
 
         tela.blit(self.imagem, (self.rect.x, self.rect.y))
 
@@ -76,7 +76,7 @@ class InputBox():
         self.clicked = False
         self.input = ""
 
-    def criar(self, tela):
+    def criar_inputbox(self, tela):
         pygame.draw.rect(tela, self.fundo, self.rect)
         pygame.draw.rect(tela, PRETO, self.rectborda, 2)
         tela.blit(self.textosuperficie, self.textorect)
@@ -100,7 +100,7 @@ class InputBox():
                     self.textoexibido = self.textoexibido[:-1]
 
                 else:
-                    if len(self.textoexibido) < self.limite:
+                    if len(self.textoexibido) < self.limite and evento.unicode != " ":
                         self.textoexibido += evento.unicode
 
                 self.textosuperficie = self.fonte.render(self.textoexibido, True, self.cortexto)
@@ -110,7 +110,7 @@ class InputBox():
 
 class Puzzle():
 
-    def __init__(self, frame, pos, coresregiao, estrela, ponto, tamanho, tamanhocelulas, gridcells):
+    def __init__(self, frame, pos, coresregiao, estrela, ponto, tamanho, tamanhocelulas, gridcells, seedsgeradas):
         self.frame = frame
         self.estrela = estrela
         self.ponto = ponto
@@ -120,17 +120,20 @@ class Puzzle():
         self.tamanho = tamanho
         self.tamanhocelulas = tamanhocelulas
         self.gridcells = gridcells
+        self.seedsgeradas = seedsgeradas
 
-    def gerarpuzzle(self, semente):
+    def gerar_puzzle(self, semente):
         self.game = generatepuzzle(8, semente)[0]
         self.coordsestrela = generatepuzzle(8, semente)[1]
+        if len(semente) > 1:
+            self.seedsgeradas.append(semente)
 
         return self.game, self.coordsestrela
 
-    def desenharframe(self, tela):
+    def desenhar_frame(self, tela):
         pygame.draw.rect(tela, BRANCO, pygame.Rect(self.posx, self.posy, self.tamanho, self.tamanho))
  
-    def desenharpuzzle(self, tela):
+    def desenhar_puzzle(self, tela):
         pygame.draw.rect(tela, PRETO, pygame.Rect(self.posx, self.posy, self.tamanho, self.tamanho))
         for i, x in enumerate(range(self.posx + 1, self.posx + self.tamanho, self.tamanhocelulas + 1)):  
             for j, y in enumerate(range(self.posy + 1, self.posy + self.tamanho, self.tamanhocelulas + 1)):
@@ -138,7 +141,7 @@ class Puzzle():
                 self.celula = self.game[i][j]
                 pygame.draw.rect(tela, self.cores[self.celula[1]], self.rect)
     
-    def controles(self, evento):
+    def ativar_controles(self, evento):
         if evento.type == pygame.MOUSEBUTTONDOWN and self.posx < evento.pos[0] < self.tamanho + self.posx and self.posy < evento.pos[1] < self.tamanho + self.posy:
             x = (evento.pos[0] - self.posx) // 49
             y = (evento.pos[1] - self.posy) // 49
@@ -172,6 +175,15 @@ class Puzzle():
                 if self.gridcells[i][j] == 2:
                     contador += 1
         return contador
+    
+    def celulas_com_marcacao(self):
+        for i in range(len(self.gridcells)):
+            for j in range(len(self.gridcells)):
+                if self.gridcells[i][j]:
+                    return True
+        
+        return False
+
 
     def vitoria(self):
         ganhou = True
@@ -196,7 +208,7 @@ class Timer():
         self.inicio = 0
         self.iniciou = False
 
-    def criartimer(self, tela):
+    def criar_timer(self, tela):
         if self.iniciou:
             self.tempopassado = pygame.time.get_ticks() // 1000 - self.inicio
 
