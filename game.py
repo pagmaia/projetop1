@@ -84,6 +84,7 @@ while rodando:
             timer.criar_timer(tela)
             game.desenhar_puzzle(tela)
             game.desenhar_ponto_estrela(tela)
+            game.ativar_hold()
             jogoativo = True
 
             if game.vitoria():
@@ -113,9 +114,7 @@ while rodando:
 
         if exibindo == "game":
             seedinputbox.lidar_input(event)
-        if jogoativo:
-            game.ativar_controles(event)
-
+        
         if event.type == pygame.KEYDOWN:
             if exibindo == "game":
                 if event.key == pygame.K_RETURN and game.seedsgeradas[-1] != seedinputbox.input:
@@ -136,6 +135,9 @@ while rodando:
                     exibindo = "howtoplay"
 
             if exibindo == "game":
+                if jogoativo:
+                    game.ativar_click(event)
+
                 if bsair.lidar_press(event):
                     exibindo = "menu"
                     jogoativo = False
@@ -160,3 +162,4 @@ while rodando:
     pygame.display.update()
 
 pygame.quit()
+

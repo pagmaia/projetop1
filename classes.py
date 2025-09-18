@@ -122,6 +122,8 @@ class Puzzle():
         self.gridcells = gridcells
         self.seedsgeradas = seedsgeradas
         self.log = []
+        self.segurando = False
+        self.clicked = False
 
     def gerar_puzzle(self, semente):
         self.game = generatepuzzle(8, semente)[0]
@@ -142,22 +144,58 @@ class Puzzle():
                 self.celula = self.game[i][j]
                 pygame.draw.rect(tela, self.cores[self.celula[1]], self.rect)
     
-    def ativar_controles(self, evento):
-        if evento.type == pygame.MOUSEBUTTONDOWN and self.posx < evento.pos[0] < self.tamanho + self.posx and self.posy < evento.pos[1] < self.tamanho + self.posy:
-            x = (evento.pos[0] - self.posx) // 49
-            y = (evento.pos[1] - self.posy) // 49
+    def calcular_pos(self, ):
+
+        posmousex, posmousey = pygame.mouse.get_pos()
+
+        if self.posx < posmousex < self.tamanho + self.posx and self.posy < posmousey < self.tamanho + self.posy:
+            x = (posmousex - self.posx) // 49
+            y = (posmousey - self.posy) // 49
             
             if x > 7:
-                x -= 1
+                x = 7
             if y > 7:
-                y -= 1
-        
-            self.gridcells[x][y] += 1
-            self.log.append((x, y))
+                y = 7
 
+            return (x, y)
+
+    def ativar_click(self, evento):
+        if evento.type == pygame.MOUSEBUTTONDOWN and evento.button == 1:
+            self.clicked = True
+        elif evento.type == pygame.MOUSEBUTTONUP and evento.button == 1:
+            self.clicked = False
+
+        if self.clicked:
+            pos = self.calcular_pos()
+
+            if pos != None:
+                x = pos[0]
+                y = pos[1]        
+                self.gridcells[x][y] += 1
+                self.log.append((x, y))
+
+    def ativar_hold(self):
+        if pygame.mouse.get_pressed()[0]:
+            self.segurando = True
+        else:
+            self.segurando = False
+
+        if self.segurando:
+            pos = self.calcular_pos()
+
+            if pos != None:
+                x = pos[0]
+                y = pos[1]
+
+                if not self.gridcells[x][y]:        
+                    self.gridcells[x][y] += 1
+                    self.log.append((x, y))
+                
     def desenhar_ponto_estrela(self, tela):
-        for i in range(len(self.gridcells)):
-            for j in range(len(self.gridcells)):
+        for pos in self.log:
+                i = pos[0]
+                j = pos[1]
+
                 if self.gridcells[i][j] > 2:
                     self.gridcells[i][j] = 0
             
