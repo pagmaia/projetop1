@@ -97,7 +97,7 @@ def main():
 
         elif exibindo == "vitoria":
             seedpuzzle = Texto((180, 237), f"Seed: {seedinputbox.input}", fonteprincipal30, PRETO)
-            timerfinal = Texto((180, 287), f"Tempo:{timer.tempopassado // 60:2d}:{timer.tempopassado % 60}", fonteprincipal30, PRETO)
+            timerfinal = Texto((180, 287), f"Tempo:{timer.tempopassado // 60:2d}:{timer.tempopassado % 60:2d}", fonteprincipal30, PRETO)
             bsair.criar_botao(tela)
             vitoriatexto.criar_texto(tela)
             seedpuzzle.criar_texto(tela)
