@@ -37,3 +37,4 @@ https://www.youtube.com/watch?v=2Wtexj66bV0
 7. Divirta-se!
 
 Feito por Pedro Arthur Gomes Maia
+Monitor: Maria Luísa Pereira Gomes
