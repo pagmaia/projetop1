@@ -9,6 +9,9 @@ A interface gráfica foi criada utilizando Pygame.
 -- Python 3.12.7 --  
 -- Pygame 2.6.1 -- 
 
+# Vídeo
+https://www.youtube.com/watch?v=2Wtexj66bV0
+
 # Instruções para instalação:
 1. No terminal Linux ou Windows, clone o repositório usando o seguinte comando (Necessário que o usuário tenha [Git](https://git-scm.com/downloads) instalado):
    ```
