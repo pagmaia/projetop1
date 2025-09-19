@@ -22,7 +22,7 @@ https://www.youtube.com/watch?v=2Wtexj66bV0
    python3 -m venv .venv
    ```
 
-3. Ative o enviroment com um desses comando dependendo da plataforma do usuário:
+3. Ative o enviroment com um desses comandos dependendo da plataforma do usuário:
      
    <img width="506" height="259" alt="imagem_2025-09-18_201327293" src="https://github.com/user-attachments/assets/f7da55f8-16fe-4418-8737-52fa07049a30" />
 
