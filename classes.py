@@ -123,7 +123,6 @@ class Puzzle():
         self.seedsgeradas = seedsgeradas
         self.log = []
         self.segurando = False
-        self.clicked = False
 
     def gerar_puzzle(self, semente):
         self.game = generatepuzzle(8, semente)[0]
@@ -144,7 +143,7 @@ class Puzzle():
                 self.celula = self.game[i][j]
                 pygame.draw.rect(tela, self.cores[self.celula[1]], self.rect)
     
-    def calcular_pos(self, ):
+    def calcular_pos(self):
 
         posmousex, posmousey = pygame.mouse.get_pos()
 
@@ -160,10 +159,7 @@ class Puzzle():
             return (x, y)
 
     def ativar_click(self, evento):
-        if not self.clicked and evento.type == pygame.MOUSEBUTTONDOWN and evento.button == 1:
-            self.clicked = True
-
-        if self.clicked:
+        if evento.type == pygame.MOUSEBUTTONDOWN:
             pos = self.calcular_pos()
 
             if pos != None:
@@ -171,8 +167,6 @@ class Puzzle():
                 y = pos[1]        
                 self.gridcells[x][y] += 1
                 self.log.append((x, y))
-
-        self.clicked = False
 
     def ativar_hold(self):
         if pygame.mouse.get_pressed()[0]:
