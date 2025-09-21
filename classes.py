@@ -160,10 +160,8 @@ class Puzzle():
             return (x, y)
 
     def ativar_click(self, evento):
-        if evento.type == pygame.MOUSEBUTTONDOWN and evento.button == 1:
+        if not self.clicked and evento.type == pygame.MOUSEBUTTONDOWN and evento.button == 1:
             self.clicked = True
-        elif evento.type == pygame.MOUSEBUTTONUP and evento.button == 1:
-            self.clicked = False
 
         if self.clicked:
             pos = self.calcular_pos()
@@ -173,6 +171,8 @@ class Puzzle():
                 y = pos[1]        
                 self.gridcells[x][y] += 1
                 self.log.append((x, y))
+
+        self.clicked = False
 
     def ativar_hold(self):
         if pygame.mouse.get_pressed()[0]:
@@ -196,7 +196,7 @@ class Puzzle():
                 i = pos[0]
                 j = pos[1]
 
-                if self.gridcells[i][j] > 2:
+                if self.gridcells[i][j] > 3:
                     self.gridcells[i][j] = 0
             
                 if self.gridcells[i][j] == 1:
