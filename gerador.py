@@ -1,36 +1,41 @@
-
 # Código para gerar um puzzle de tamanho NxN, de 1 estrela
 from random import choice
 from random import seed
 from copy import deepcopy
 
-#Check para checar se a posicao é segura para colocar uma estrela
-def pos_segura_estrela(posx, posy, tabuleiro, regioes_posicoes, checkregiao = False):
+def inicializar_puzzle(tamanho):
+    regioes_posicoes = {ID: [] for ID in range(1, tamanho + 1)}
+    tabuleiro = [[[False, 0] for i in range(tamanho)] for i in range(tamanho)]
+    coords_estrelas = []
 
-    if checkregiao:
-        for valor in regioes_posicoes[tabuleiro[posx][posy][1]]:
-            if tabuleiro[valor[0]][valor[1]][0]:
-                return False
+    return regioes_posicoes, tabuleiro, coords_estrelas
 
-    if posx < 0 or posx > len(tabuleiro) - 1 or posy < 0 or posy > len(tabuleiro) - 1:
-        return False
-    
+def check_linha_coluna(posx, posy, tabuleiro):
     for j in range(posx, len(tabuleiro)):
         if tabuleiro[posx][j][0]:
             return False
-        
+
     for j in range(posx, -1, -1):
         if tabuleiro[posx][j][0]:
             return False
-        
+
     for i in range(posy, len(tabuleiro)):
         if tabuleiro[i][posy][0]:
             return False
-        
+
     for i in range(posy, -1, -1):
         if tabuleiro[i][posy][0]:
             return False
-        
+    
+    return True
+
+def check_foradogrid(posx, posy, tabuleiro):
+    if posx < 0 or posx > len(tabuleiro) - 1 or posy < 0 or posy > len(tabuleiro) - 1:
+        return False
+    
+    return True
+
+def check_diagonais(posx, posy, tabuleiro):
     cimadireita = (posx - 1, posy + 1)
     cimaesquerda = (posx - 1, posy - 1)
     baixodireita = (posx + 1, posy + 1)
@@ -38,16 +43,28 @@ def pos_segura_estrela(posx, posy, tabuleiro, regioes_posicoes, checkregiao = Fa
     diagonais = [cimadireita, cimaesquerda, baixodireita, baixoesquerda]
 
     for pos in diagonais:
-        
+
         if 0 <= pos[0] < len(tabuleiro) and 0 <= pos[1] < len(tabuleiro):
 
             if tabuleiro[pos[0]][pos[1]][0]:
                 return False
-        
     return True
 
-#Todas as escolhas possiveis para uma estrela
-def escolhas_possiveis(tabuleiro, regioes_posicoes):
+def pos_segura_estrela(posx, posy, tabuleiro, regioes_posicoes, checkregiao=False):
+
+    if checkregiao:
+        for valor in regioes_posicoes[tabuleiro[posx][posy][1]]:
+            if tabuleiro[valor[0]][valor[1]][0]:
+                return False
+
+    if not check_linha_coluna(posx, posy, tabuleiro) \
+    or not check_diagonais(posx, posy, tabuleiro) \
+    or not check_foradogrid(posx, posy, tabuleiro):
+        return False
+
+    return True
+
+def escolhas_possivel_aleatoria(tabuleiro, regioes_posicoes):
     possiveis = []
 
     for i in range(len(tabuleiro)):
@@ -57,47 +74,52 @@ def escolhas_possiveis(tabuleiro, regioes_posicoes):
 
     if not possiveis:
         return False
-    
+
     posicao = choice(possiveis)
 
     return (posicao[0], posicao[1])
 
-#Gera matriz com N estrelas em posicoes validas
+def reset_estrelas(tabuleiro, coords_estrela, regioes_posicoes, regiao):
+    for i in range(len(coords_estrela) - 1, -1, -1):
+        tabuleiro[coords_estrela[i][0]][coords_estrela[i][1]][0] = False
+        tabuleiro[coords_estrela[i][0]][coords_estrela[i][1]][1] = 0
+        coords_estrela.pop(i)
+        regiao -= 1
+        regioes_posicoes[regiao] = []
+
+    return regiao
+
+def escolhe_estrela(status, tabuleiro, coords_estrela, regioes_posicoes, regiao):
+    posx, posy = status[0], status[1]
+    tabuleiro[posx][posy][0] = True
+    tabuleiro[posx][posy][1] = regiao
+    coords_estrela.append((posx, posy))
+    regioes_posicoes[regiao].append((posx, posy))
+    regiao += 1
+
+    return regiao
+
 def gerar_estrelas(tamanho):
     regiao = 1
-    regioes_posicoes = {ID: [] for ID in range(1, tamanho + 1)}
-    tabuleiro = [[[False, 0] for i in range(tamanho)] for i in range(tamanho)]
-    coords_estrela = []
-    
-    while len(coords_estrela) < tamanho:
+    regioes_posicoes, tabuleiro, coords_estrelas = inicializar_puzzle(tamanho)
+    while len(coords_estrelas) < tamanho:
 
-        status = escolhas_possiveis(tabuleiro, regioes_posicoes)
-        
-        if not status:
-            for i in range(len(coords_estrela) -1, -1, -1):
-                tabuleiro[coords_estrela[i][0]][coords_estrela[i][1]][0] = False
-                tabuleiro[coords_estrela[i][0]][coords_estrela[i][1]][1] = 0
-                coords_estrela.pop(i)
-                regiao -= 1
-                regioes_posicoes[regiao] = []
-                
+        posicao = escolhas_possivel_aleatoria(tabuleiro, regioes_posicoes)
+
+        if not posicao:
+            regiao = reset_estrelas(tabuleiro, coords_estrelas, regioes_posicoes, regiao)
+
         else:
-            posx, posy = status[0], status[1]
-            tabuleiro[posx][posy][0] = True
-            tabuleiro[posx][posy][1] = regiao
-            coords_estrela.append((posx, posy))
-            regioes_posicoes[regiao].append((posx, posy))
-            regiao += 1
-        
-    return tabuleiro, coords_estrela, regioes_posicoes
+            regiao = escolhe_estrela(posicao, tabuleiro, coords_estrelas, regioes_posicoes, regiao)
 
-#Gera sequencia aleatoria para preencher as regioes
+    return tabuleiro, coords_estrelas, regioes_posicoes
+
 def celulas(target, tamanho):
-    min, max  = 0, tamanho * 2
+    minimo, maximo = 0, tamanho * 2
     elementos = tamanho
-    
+
     numeros = []
-    intervalo = range(min, max + 1)
+    intervalo = range(minimo, maximo + 1)
 
     while True:
         numeros.append(choice(intervalo))
@@ -106,8 +128,7 @@ def celulas(target, tamanho):
                 return numeros
             numeros = numeros[1:]
 
-#Cria direcoes validas para gerar as regioes
-def criar_direcoes_validas(posx, posy, tabuleiro, melhorado = False):
+def criar_direcoes_validas(posx, posy, tabuleiro, melhorado=False):
     cima = (posx - 1, posy)
     baixo = (posx + 1, posy)
     direita = (posx, posy + 1)
@@ -117,38 +138,37 @@ def criar_direcoes_validas(posx, posy, tabuleiro, melhorado = False):
     direcoesvalidas = []
 
     for direcao in direcoes:
-                    
-        if direcao[0] < 0 or direcao[0] > len(tabuleiro) - 1 or direcao[1] < 0 or direcao[1] > len(tabuleiro) - 1:
+
+        if (
+            direcao[0] < 0
+            or direcao[0] > len(tabuleiro) - 1
+            or direcao[1] < 0
+            or direcao[1] > len(tabuleiro) - 1
+        ):
             continue
-        
+
         if melhorado:
-            if tabuleiro[direcao[0]][direcao[1]][0]:
+            if tabuleiro[direcao[0]][direcao[1]][0] or tabuleiro[direcao[0]][direcao[1]][1]:
                 continue
 
-            elif tabuleiro[direcao[0]][direcao[1]][1]:
-                continue
-                    
         direcoesvalidas.append((direcao[0], direcao[1]))
 
     return direcoesvalidas
 
-#Checa se há posicao válida para colocar uma regiao e escolhe uma direcao caso tenha
 def pos_segura_regiao(regiao, regioes_posicoes, tabuleiro):
     melhorado = True
 
     posx = regioes_posicoes[regiao][-1][0]
     posy = regioes_posicoes[regiao][-1][1]
-                    
+
     direcoesvalidas = criar_direcoes_validas(posx, posy, tabuleiro, melhorado)
-                    
+
     if not direcoesvalidas:
         return False
-        
-    else:
-        direcaoescolhida = choice(direcoesvalidas)
-        return direcaoescolhida
 
-#Calcula as celulas sem regiao no tabuleiro
+    direcaoescolhida = choice(direcoesvalidas)
+    return direcaoescolhida
+
 def calcula_vazias(tabuleiro):
     vazias = []
     for i in range(len(tabuleiro)):
@@ -158,7 +178,6 @@ def calcula_vazias(tabuleiro):
 
     return vazias
 
-#Preenche o resto das regioes que estao vazias atribuindo aleatoriamente o id de uma das regioes vizinhas para ela
 def preenche_resto(tabuleiro, regioes_posicoes):
     vazias = []
 
@@ -169,7 +188,7 @@ def preenche_resto(tabuleiro, regioes_posicoes):
         for pos in vazias:
             regioes = []
             direcoes = criar_direcoes_validas(pos[0], pos[1], tabuleiro)
-            
+
             for direcao in direcoes:
                 if tabuleiro[direcao[0]][direcao[1]][1]:
                     regioes.append(tabuleiro[direcao[0]][direcao[1]][1])
@@ -177,45 +196,39 @@ def preenche_resto(tabuleiro, regioes_posicoes):
             if not regioes:
                 continue
 
-            else:
-                regiaoaleatoria = choice(regioes)
-                tabuleiro[pos[0]][pos[1]][1] = regiaoaleatoria
-                regioes_posicoes[regiaoaleatoria].append((pos[0], pos[1]))
-        
-        vazias = calcula_vazias(tabuleiro)
-    
+            regiaoaleatoria = choice(regioes)
+            tabuleiro[pos[0]][pos[1]][1] = regiaoaleatoria
+            regioes_posicoes[regiaoaleatoria].append((pos[0], pos[1]))           
+        vazias = calcula_vazias(tabuleiro)   
     return tabuleiro
 
-#Gera as regioes
 def gerar_regioes(tabuleiro, regioes_posicoes):
 
     regiao = 1
     validos = celulas(len(tabuleiro) ** 2 - len(tabuleiro), len(tabuleiro))
-        
+
     for passos in validos:
         i = 0
 
-        while i < passos:  
+        while i < passos:
             direcaoescolhida = pos_segura_regiao(regiao, regioes_posicoes, tabuleiro)
 
             if not direcaoescolhida:
                 break
-            
-            else:
-                tabuleiro[direcaoescolhida[0]][direcaoescolhida[1]][1] = regiao
-                posx = direcaoescolhida[0]
-                posy = direcaoescolhida[1]
-                regioes_posicoes[regiao].append((posx, posy))
-            
-            i += 1  
-        
+
+            tabuleiro[direcaoescolhida[0]][direcaoescolhida[1]][1] = regiao
+            posx = direcaoescolhida[0]
+            posy = direcaoescolhida[1]
+            regioes_posicoes[regiao].append((posx, posy))
+
+            i += 1
+
         regiao += 1
 
     tabuleiro = preenche_resto(tabuleiro, regioes_posicoes)
 
     return tabuleiro, regioes_posicoes
 
-#Cria um tabuleiro com apenas o id das regioes
 def tabuleirovazio(tabuleiro):
     game = []
     for i in range(len(tabuleiro)):
@@ -230,8 +243,7 @@ def tabuleirovazio(tabuleiro):
 
     return game
 
-#Testa o puzzle para checar se tem apenas uma solucao
-def testpuzzle(game, regioes_posicoes, solucoes = None, linha = 0):
+def testpuzzle(game, regioes_posicoes, solucoes=None, linha=0):
     checkregiao = True
     if solucoes is None:
         solucoes = []
@@ -239,7 +251,7 @@ def testpuzzle(game, regioes_posicoes, solucoes = None, linha = 0):
     if linha == len(game):
         solucoes.append(deepcopy(game))
         return len(solucoes) < 2
-    
+
     for coluna in range(len(game)):
 
         if pos_segura_estrela(linha, coluna, game, regioes_posicoes, checkregiao):
@@ -247,24 +259,20 @@ def testpuzzle(game, regioes_posicoes, solucoes = None, linha = 0):
 
             if not testpuzzle(game, regioes_posicoes, solucoes, linha + 1):
                 return False
-            
+
         game[linha][coluna][0] = 0
 
     return True
 
-# Gerar puzzle
 def generatepuzzle(tamanho, semente):
     seed(semente)
     while True:
         tabuleiro, coords_estrelas, regioes_posicoes = gerar_estrelas(tamanho)
         tabuleiro, regioes_posicoes = gerar_regioes(tabuleiro, regioes_posicoes)
-        
+
         solucoes = []
         game = tabuleirovazio(tabuleiro)
         testpuzzle(game, regioes_posicoes, solucoes)
-            
+
         if len(solucoes) == 1:
             return tabuleiro, coords_estrelas, regioes_posicoes
-
-
-
