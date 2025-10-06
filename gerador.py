@@ -50,12 +50,18 @@ def check_diagonais(posx, posy, tabuleiro):
                 return False
     return True
 
+def check_regiao(posx, posy, tabuleiro, regioes_posicoes):
+    for valor in regioes_posicoes[tabuleiro[posx][posy][1]]:
+        if tabuleiro[valor[0]][valor[1]][0]:
+            return False
+            
+    return True
+
 def pos_segura_estrela(posx, posy, tabuleiro, regioes_posicoes, checkregiao=False):
 
     if checkregiao:
-        for valor in regioes_posicoes[tabuleiro[posx][posy][1]]:
-            if tabuleiro[valor[0]][valor[1]][0]:
-                return False
+        if not check_regiao(posx, posy, tabuleiro, regioes_posicoes):
+            return False
 
     if not check_linha_coluna(posx, posy, tabuleiro) \
     or not check_diagonais(posx, posy, tabuleiro) \
